@@ -1,0 +1,52 @@
+---
+import {
+  getCategoryConfig,
+  getEnabledCategoryIds,
+  getPosts,
+  getPostCategory,
+  getCategoryPath,
+} from '@lib/content';
+import { DEFAULT_LOCALE } from '@lib/language';
+import { ensureTrailingSlash } from '@utils/url';
+import { getLangFromUrl, useTranslatedPath } from '@i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const translatePath = useTranslatedPath(lang);
+const sidebarCategoryIds = new Set(['blog', 'projects']);
+
+const posts = await getPosts({ lang });
+const counts = posts.reduce<Record<string, number>>((acc, post) => {
+  const category = getPostCategory(post);
+  acc[category] = (acc[category] ?? 0) + 1;
+  return acc;
+}, {});
+
+const links = getEnabledCategoryIds()
+  .filter((key) => sidebarCategoryIds.has(key))
+  .map((key) => {
+    const config = getCategoryConfig(key);
+    if (!config) {
+      return null;
+    }
+
+    return {
+      key,
+      href: translatePath(getCategoryPath(key)),
+      label: config.label?.[lang] ?? config.label?.[DEFAULT_LOCALE] ?? key,
+      icon: config.icon ?? '📁',
+      count: counts[key] ?? 0,
+    };
+  })
+  .filter((link): link is NonNullable<typeof link> => Boolean(link && link.count > 0));
+
+const currentPath = ensureTrailingSlash(Astro.url.pathname);
+---
+<div class="tags__list">
+  {links.map((link) => (
+    <a class="tags__item" href={link.href} data-active={link.href === currentPath ? 'true' : 'false'}>
+      <span class="tags__item-icon" aria-hidden="true">{link.icon}</span>
+      <span class="tags__item-label">{link.label}</span>
+      <span class="tags__item-count">{link.count}</span>
+    </a>
+  ))}
+</div>

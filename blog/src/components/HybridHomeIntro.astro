@@ -1,0 +1,151 @@
+---
+import siteConfig from '@config/site';
+
+type Feature = {
+  icon: string;
+  glyph: string;
+  label: string;
+  text: string;
+  href: string;
+  blogHref: string;
+  projectHref: string;
+};
+
+type ContactLink = {
+  id?: string;
+  name: string;
+  url: string;
+  icon?: string;
+  iconSvg?: string;
+};
+
+const { contactLinks = [] } = Astro.props as { contactLinks?: ContactLink[] };
+
+const isExternalLink = (url: string) => /^https?:\/\//i.test(url);
+const avatarSrc = siteConfig.author.avatar;
+
+const features: Feature[] = [
+  {
+    icon: "💻",
+    label: "C++ && Linux",
+    glyph: "💻",
+    text: "Systems programming, Linux workflow, backend notes, and implementation records.",
+    href: "/?tag=cpp-linux",
+    blogHref: "/blog/?tag=cpp-linux",
+    projectHref: "/projects/?tag=cpp-linux",
+  },
+  {
+    icon: "🤖",
+    label: "Agent",
+    glyph: "🤖",
+    text: "LLM agents, retrieval, tool use, memory, and workflow design.",
+    href: "/?tag=agent",
+    blogHref: "/blog/?tag=agent",
+    projectHref: "/projects/?tag=agent",
+  },
+  {
+    icon: "🧮",
+    label: "Algorithm",
+    glyph: "🧠",
+    text: "Data structures, algorithm notes, problem patterns, and summaries.",
+    href: "/?tag=algorithm",
+    blogHref: "/blog/?tag=algorithm",
+    projectHref: "/projects/?tag=algorithm",
+  },
+];
+---
+
+<section class="hybrid-home" aria-label="Featured introduction">
+  <div class="hybrid-home__copy">
+    <p class="hybrid-home__eyebrow">Personal learning log</p>
+    <h2 class="hybrid-home__title">Yummm Blog</h2>
+    <p class="hybrid-home__text">
+      Notes for learning in public: theory, implementation details, reading notes,
+      and reusable summaries from C++/Linux, Agent systems, and algorithms.
+    </p>
+    <div class="hybrid-home__actions" aria-label="Quick links">
+      <a class="hybrid-home__button hybrid-home__button--primary" href="#posts">Start reading</a>
+      <a class="hybrid-home__button" href="#contact">Contact</a>
+    </div>
+  </div>
+
+  <aside class="hybrid-home__showcase" aria-label="Profile and projects">
+    <div class="hybrid-home__portrait-card" aria-hidden="true">
+      <img src={avatarSrc} alt="" loading="lazy" />
+      <span class="hybrid-home__spark hybrid-home__spark--one">✦</span>
+      <span class="hybrid-home__spark hybrid-home__spark--two">✧</span>
+    </div>
+
+    <div class="hybrid-home__side-panel">
+      <a class="hybrid-home__profile-card" href="/about/">
+        <span class="hybrid-home__panel-title"><span aria-hidden="true">💻</span> Profile</span>
+        <span>Learning systems, agents, algorithms, and practical engineering notes.</span>
+      </a>
+
+      <a class="hybrid-home__project-card" href="/projects/">
+        <span class="hybrid-home__panel-title"><span aria-hidden="true">🌟</span> Projects</span>
+        <span>Code experiments, tools, and reusable learning artifacts.</span>
+      </a>
+
+      {contactLinks.length > 0 && (
+        <div id="contact" class="hybrid-home__contact-card" tabindex="-1">
+          <span class="hybrid-home__panel-title"><span aria-hidden="true">📬</span> Contact</span>
+          <div class="hybrid-home__contact-links" aria-label="Contact links">
+            {contactLinks.map((link) => (
+              <a
+                href={link.url}
+                aria-label={link.name}
+                title={link.name}
+                target={isExternalLink(link.url) ? '_blank' : undefined}
+                rel={isExternalLink(link.url) ? 'noreferrer' : undefined}
+              >
+                {link.iconSvg ? (
+                  <span class="icon" aria-hidden="true" set:html={link.iconSvg}></span>
+                ) : (
+                  <span aria-hidden="true">{link.icon ?? '+'}</span>
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </aside>
+
+  <aside class="hybrid-home__profile" aria-label="Profile and project">
+    <div class="hybrid-home__profile-heading">
+      <span aria-hidden="true">💻</span>
+      <span>Profile</span>
+    </div>
+    <div class="hybrid-home__profile-card">
+      <img src={avatarSrc} alt="Yummm avatar" loading="lazy" />
+      <p>Learning notes about systems, agents, algorithms, and theory.</p>
+    </div>
+    <div class="hybrid-home__profile-heading hybrid-home__profile-heading--project">
+      <span aria-hidden="true">🌟</span>
+      <span>Projects</span>
+    </div>
+    <a class="hybrid-home__project" href="https://github.com/Yummmenggg/my-blog" target="_blank" rel="noreferrer">
+      <span aria-hidden="true">GitHub</span>
+      <span>Yummm Blog</span>
+    </a>
+  </aside>
+
+  <div class="hybrid-home__tracks" aria-label="Learning collections">
+    {features.map((feature) => (
+      <article class="hybrid-home__track">
+        <a class="hybrid-home__track-main" href={feature.href}>
+          <span class="hybrid-home__track-icon" aria-hidden="true">{feature.glyph}</span>
+          <div>
+            <h3>{feature.label}</h3>
+            <p>{feature.text}</p>
+          </div>
+        </a>
+        <div class="hybrid-home__track-links" aria-label={`${feature.label} collections`}>
+          <a href={feature.blogHref}><span aria-hidden="true">📝</span> Blog</a>
+          <a href={feature.projectHref}><span aria-hidden="true">🧩</span> Projects</a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
