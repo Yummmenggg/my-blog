@@ -4,6 +4,8 @@ This Astro project lives in the repository's `blog/` folder.
 
 The repository root deploys it with GitHub Actions from `.github/workflows/deploy-blog.yml`.
 
+The workflow builds from this `blog/` directory and uploads `blog/dist`.
+
 ## One-time GitHub setup
 
 1. Push the whole repository to GitHub.
