@@ -6,6 +6,28 @@ import { DEFAULT_LOCALE } from '@lib/language';
 
 export async function getStaticPaths({ paginate }) {
   const posts = await getPosts({ lang: DEFAULT_LOCALE });
+  if (posts.length === 0) {
+    return [
+      {
+        params: { page: undefined },
+        props: {
+          page: {
+            data: [],
+            start: 0,
+            end: 0,
+            size: siteConfig.postsPerPage,
+            total: 0,
+            currentPage: 1,
+            lastPage: 1,
+            url: {
+              current: '/',
+            },
+          },
+        },
+      },
+    ];
+  }
+
   return paginate(posts, { pageSize: siteConfig.postsPerPage });
 }
 

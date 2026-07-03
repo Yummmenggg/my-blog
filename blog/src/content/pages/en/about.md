@@ -1,35 +1,17 @@
 ---
-title: About | Morethan Log
-h1: About This Blog
+title: About | Yum
+h1: About Yum Blog
 ---
-Welcome to Morethan Log - a modern static blog template built with Astro.
+This is Yum's personal learning log.
 
-This template is inspired by the popular [morethan-log](https://github.com/morethanmin/morethan-log) Next.js template, but rebuilt from the ground up for Astro.
+I use this site to collect notes, experiments, and reusable summaries from three long-term directions:
 
-## Features
+## Directions
 
-- 🚀 Built with Astro for blazing-fast performance
-- 🌐 Full i18n support (English and Russian by default)
-- 📱 Responsive design that works on all devices
-- 🎨 Clean and modern UI
-- 📝 Markdown support for easy content creation
-- 🔍 Built-in search functionality
-- 📊 SEO optimized
-- 🌙 Dark mode support
+- C++ && Linux
+- Agent systems
+- Algorithms
 
-## Getting Started
+## Notes
 
-1. Fork this repository
-2. Update `src/config/site.ts` with your information
-3. Replace demo content with your own
-4. Deploy to your favorite hosting platform
-
-## Tech Stack
-
-- **Framework**: Astro
-- **Language**: TypeScript/JavaScript
-- **Styling**: CSS
-- **Version Control**: Git
-- **Deployment**: Netlify/Vercel
-
-Feel free to customize this template to match your needs!
+Blog posts and project notes will be organized by tags so that each idea can be searched and filtered later.

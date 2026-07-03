@@ -5,25 +5,25 @@ const siteConfig: SiteConfig = {
   // Basic site information
   siteUrl: 'https://Yummmenggg.github.io/my-blog',
   title: {
-    en: 'Morethan-Log',
-    ru: 'Morethan-Log',
+    en: 'Yum',
+    ru: 'Yum',
   },
   description: {
-    en: 'A modern blog template built with Astro - fast, responsive, and multilingual',
-    ru: 'Современный шаблон блога на Astro - быстрый, адаптивный и многоязычный',
+    en: 'Personal learning notes about C++/Linux, Agent systems, and algorithms',
+    ru: 'Personal learning notes about C++/Linux, Agent systems, and algorithms',
   },
 
   // Author information
   author: {
     name: {
-      en: 'Sereja',
-      ru: 'Серёжа',
+      en: 'Yum',
+      ru: 'Yum',
     },
-    email: 'demo@morethan-log.com',
+    email: '',
     avatar: '/img/avatar.jpg',
     bio: {
-      en: 'Full-stack developer passionate about creating beautiful and functional web applications. Building with Astro, React, and modern web technologies.',
-      ru: 'Full-stack разработчик, увлеченный созданием красивых и функциональных веб-приложений. Работаю с Astro, React и современными веб-технологиями.',
+      en: 'Learning notes about systems, agents, algorithms, and practical engineering.',
+      ru: 'Learning notes about systems, agents, algorithms, and practical engineering.',
     },
   },
 
@@ -144,11 +144,11 @@ const siteConfig: SiteConfig = {
 
   projects: [
     {
-      id: 'morethan-log-astro',
-      url: 'https://github.com/JustSereja/morethan-log-astro',
+      id: 'yum-blog',
+      url: 'https://github.com/Yummmenggg/my-blog',
       label: {
-        en: 'Morethan-Log for Astro',
-        ru: 'Morethan-Log для Astro',
+        en: 'Yum Blog',
+        ru: 'Yum Blog',
       },
       iconSvg: `<svg
   stroke="currentColor"
@@ -230,7 +230,7 @@ const siteConfig: SiteConfig = {
   // SEO & Meta tags
   seo: {
     defaultImage: '/img/og-image.svg',
-    twitterHandle: 'astrodotbuild',
+    twitterHandle: '',
     googleAnalytics: '',
   },
 

@@ -1,33 +1,18 @@
 ---
-title: О блоге | Morethan Log
-h1: О блоге
+title: About | Yum
+h1: About Yum Blog
 permalink: 'obo-mne'
 ---
-Добро пожаловать в Morethan Log - современный шаблон статического блога, построенный на Astro.
+This is Yum's personal learning log.
 
-Этот шаблон вдохновлен популярным [morethan-log](https://github.com/morethanmin/morethan-log) шаблоном для Next.js, но полностью переработан для Astro.
+I use this site to collect notes, experiments, and reusable summaries from three long-term directions:
 
-## Возмо- 🚀 Создан на Ast- 🚀 Построен на Astro для молниеносной производительности
-- 🌐 Полная поддержка i18n (английский и русский по умолчанию)
-- 📱 Адаптивный дизайн для всех устройств
-- 🎨 Чистый и современный интерфейс
-- 📝 Поддержка Markdown для легкого создания контента
-- 🔍 Встроенная функция поиска
-- 📊 SEO оптимизация
-- 🌙 Поддержка темной темы
+## Directions
 
-## Начало работы
+- C++ && Linux
+- Agent systems
+- Algorithms
 
-1. Сделайте форк этого репозитория
-2. Обновите `src/config/site.ts` своей информацией
-3. Замените демо-контент на свой
-4. Разверните на любимой платформе хостинга
+## Notes
 
-## Технологический стек
-
-- **Фреймворк**: Astro
-- **Язык**: TypeScript/JavaScript
-- **Стилизация**: CSS
-el
-
-Не стесняйтесь настраивать этот шаблон под свои нужды!
+Blog posts and project notes will be organized by tags so that each idea can be searched and filtered later.

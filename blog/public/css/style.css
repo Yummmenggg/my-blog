@@ -2719,7 +2719,7 @@ html:not(.dark-mode) .hljs-params {
     scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
 }
 
-/* Hybrid home intro: keeps Morethan-Log layout, adds a cartoon portfolio-style opener. */
+/* Hybrid home intro: keeps the blog layout, adds a cartoon portfolio-style opener. */
 .hybrid-home {
     position: relative;
     overflow: hidden;

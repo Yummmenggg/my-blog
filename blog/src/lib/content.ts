@@ -15,6 +15,33 @@ export interface GetPostsOptions {
 const DEFAULT_POST_SORT = (a: PostEntry, b: PostEntry) =>
   b.data.date.getTime() - a.data.date.getTime();
 
+const postContentFiles = import.meta.glob([
+  '/src/content/posts/**/*.{md,mdx}',
+  '!/src/content/posts/**/_*/**/*.{md,mdx}',
+  '!/src/content/posts/**/_*.{md,mdx}',
+]);
+
+const isEmptyPostsCollectionError = (error: unknown): boolean =>
+  error instanceof Error &&
+  error.message.includes('collection "posts"') &&
+  error.message.includes('empty');
+
+const getPostEntries = async (): Promise<PostEntry[]> => {
+  if (Object.keys(postContentFiles).length === 0) {
+    return [];
+  }
+
+  try {
+    return await getCollection('posts');
+  } catch (error) {
+    if (isEmptyPostsCollectionError(error)) {
+      return [];
+    }
+
+    throw error;
+  }
+};
+
 const CATEGORY_PLACEHOLDERS: Record<string, string> = {
   blog: '/img/posts/placeholder-blog.svg',
   technology: '/img/posts/placeholder-technology.svg',
@@ -147,7 +174,7 @@ const filterDraftedPageEntries = (entries: PageEntry[], includeDrafts = false) =
 export async function getPosts(options: GetPostsOptions = {}) {
   const { lang, category, includeDrafts = false } = options;
 
-  const entries = await getCollection('posts');
+  const entries = await getPostEntries();
   const publishedEntries = filterDraftedPostEntries(entries, includeDrafts);
 
   const filtered = publishedEntries.filter((entry) => {
@@ -203,7 +230,7 @@ export function getPostTranslationKey(entry: PostEntry) {
 
 export async function getPostTranslations(entry: PostEntry) {
   const translationKey = getPostTranslationKey(entry);
-  const allTranslations = await getCollection('posts');
+  const allTranslations = await getPostEntries();
   const publishedEntries = filterDraftedPostEntries(allTranslations);
   return publishedEntries
     .filter((candidate) => {

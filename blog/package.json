@@ -1,9 +1,9 @@
 {
-  "name": "morethan-log-astro",
+  "name": "yum-blog",
   "type": "module",
   "version": "2.5.1",
-  "description": "A modern, customizable blog template built with Astro - fast, responsive, and multilingual",
-  "author": "Sereja <demo@morethan-log.com>",
+  "description": "Personal learning notes about C++/Linux, Agent systems, and algorithms",
+  "author": "Yum",
   "license": "MIT",
   "keywords": [
     "astro",
@@ -19,12 +19,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/JustSereja/morethan-log-astro"
+    "url": "https://github.com/Yummmenggg/my-blog"
   },
   "bugs": {
-    "url": "https://github.com/JustSereja/morethan-log-astro/issues"
+    "url": "https://github.com/Yummmenggg/my-blog/issues"
   },
-  "homepage": "https://morethan-log-astro.sereja.com",
+  "homepage": "https://Yummmenggg.github.io/my-blog",
   "scripts": {
     "dev": "run-p client:watch astro:dev",
     "start": "npm run dev",
