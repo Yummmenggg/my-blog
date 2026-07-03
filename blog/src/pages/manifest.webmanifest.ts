@@ -1,4 +1,5 @@
 import siteConfig from '@config/site';
+import { withBasePath } from '@utils/url';
 import { DEFAULT_LOCALE } from '@lib/language';
 
 export async function GET() {
@@ -10,16 +11,16 @@ export async function GET() {
     name: title,
     short_name: title,
     description,
-    start_url: '/',
-    scope: '/',
+    start_url: withBasePath('/'),
+    scope: withBasePath('/'),
     display: 'standalone',
     background_color: '#ffffff',
     theme_color: '#ffffff',
     lang: defaultLang,
     icons: [
-      { src: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { src: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml' },
+      { src: withBasePath('/favicon-16x16.png'), sizes: '16x16', type: 'image/png' },
+      { src: withBasePath('/favicon-32x32.png'), sizes: '32x32', type: 'image/png' },
+      { src: withBasePath('/favicon.svg'), sizes: 'any', type: 'image/svg+xml' },
     ],
   };
 

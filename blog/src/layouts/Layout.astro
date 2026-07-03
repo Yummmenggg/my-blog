@@ -16,7 +16,7 @@ import {
   getCategoryPathSegment,
 } from '@lib/content';
 import { isDefaultLocale } from '@lib/language';
-import { ensureTrailingSlash } from '@utils/url';
+import { ensureTrailingSlash, stripBasePath, withBasePath } from '@utils/url';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '@i18n/utils';
 import PageHead from '@components/layout/PageHead.astro';
 import SiteHeader from '@components/layout/SiteHeader.astro';
@@ -65,9 +65,9 @@ const lang = currentLocaleDefinition.code;
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
-const pathname = ensureTrailingSlash(Astro.url.pathname);
+const pathname = ensureTrailingSlash(stripBasePath(Astro.url.pathname));
 const baseDomain = siteConfig.siteUrl;
-const canonicalUrl = new URL(pathname, baseDomain).toString();
+const canonicalUrl = new URL(withBasePath(pathname), baseDomain).toString();
 const basePath = import.meta.env.BASE_URL ?? '/';
 
 const categories = getEnabledCategoryIds();
@@ -100,7 +100,7 @@ const localePathPattern = SUPPORTED_LOCALES.map(escapeRegExp).join('|');
 
 const parsedAlternates = alternates.map(({ lang, url }) => {
   try {
-    return { lang, pathname: new URL(url, baseDomain).pathname };
+    return { lang, pathname: stripBasePath(new URL(url, baseDomain).pathname) };
   } catch {
     return { lang, pathname: url };
   }
@@ -113,7 +113,7 @@ const normalizeAlternatePath = (value: string): string => {
 
   try {
     const url = new URL(value, baseDomain);
-    return ensureTrailingSlash(url.pathname);
+    return ensureTrailingSlash(stripBasePath(url.pathname));
   } catch {
     const prefixed = value.startsWith('/') ? value : `/${value}`;
     return ensureTrailingSlash(prefixed);
@@ -237,7 +237,7 @@ const languageOptions = localeOptionKeys.map((definition) => {
 
   const fallbackHref =
     code === DEFAULT_LOCALE ? '/' : ensureTrailingSlash(`/${code}/`);
-  const href = isAvailable ? getLocalePath(code) : fallbackHref;
+  const href = withBasePath(isAvailable ? getLocalePath(code) : fallbackHref);
 
   return {
     code,
@@ -253,7 +253,6 @@ const htmlLang = getLocaleLangTag(lang);
 const htmlDir = getLocaleDirection(lang);
 
 function isPostListPage(): boolean {
-  const pathname = Astro.url.pathname;
   const paginatedHome = new RegExp(`^/(?:${localePathPattern}/)?(\\d+/?)?$`);
   if (pathname === '/' || paginatedHome.test(pathname)) {
     return true;
@@ -282,7 +281,7 @@ const metaDescription =
   siteConfig.description[DEFAULT_LOCALE];
 const ogImage = image && image.startsWith('http')
   ? image
-  : `${baseDomain}${image ?? siteConfig.seo.defaultImage}`;
+  : new URL(withBasePath(image ?? siteConfig.seo.defaultImage), baseDomain).toString();
 
 const searchStrings = {
   resultsHeading: t('ui.search_results_heading'),
@@ -307,12 +306,12 @@ const twitterHandle = siteConfig.seo.twitterHandle
   : undefined;
 
 const toAbsolute = (url?: string) =>
-  url ? new URL(ensureTrailingSlash(url), baseDomain).toString() : undefined;
+  url ? new URL(withBasePath(ensureTrailingSlash(url)), baseDomain).toString() : undefined;
 
 const prevAbsolute = toAbsolute(prevPageUrl);
 const nextAbsolute = toAbsolute(nextPageUrl);
 const fallbackDescription = t('ui.description');
-const homeHref = ensureTrailingSlash(`/${isDefaultLocale(lang) ? '' : lang}`);
+const homeHref = withBasePath(ensureTrailingSlash(`/${isDefaultLocale(lang) ? '' : lang}`));
 
 type ResolvedNavItem = {
   id: string;
@@ -343,7 +342,7 @@ const resolveNavItems = async (): Promise<ResolvedNavItem[]> => {
         if (localizedEntry) {
           return {
             id: item.id,
-            href: getPagePermalink(localizedEntry),
+            href: withBasePath(getPagePermalink(localizedEntry)),
             label,
           };
         }
@@ -356,7 +355,7 @@ const resolveNavItems = async (): Promise<ResolvedNavItem[]> => {
         if (fallbackEntry) {
           return {
             id: item.id,
-            href: getPagePermalink(fallbackEntry),
+            href: withBasePath(getPagePermalink(fallbackEntry)),
             label,
           };
         }

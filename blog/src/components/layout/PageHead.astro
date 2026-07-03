@@ -2,6 +2,7 @@
 import siteConfig from '@config/site';
 import { getOgLocale, resolveLocaleDefinition } from '@config/locales';
 import { DEFAULT_LOCALE, listNonDefaultLocales } from '@lib/language';
+import { withBasePath } from '@utils/url';
 
 type AlternateLink = {
   lang: string;
@@ -69,6 +70,7 @@ const articleAuthor =
   Object.values(siteConfig.author.name)[0];
 const publishedTime = publishedAt ?? null;
 const modifiedTime = modifiedAt ?? publishedTime;
+const toSiteHref = (path: string) => new URL(withBasePath(path), baseDomain).toString();
 
 ---
 <head>
@@ -82,11 +84,11 @@ const modifiedTime = modifiedAt ?? publishedTime;
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
 
-  <script is:inline src="/js/theme.js"></script>
+  <script is:inline src={withBasePath('/js/theme.js')}></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href={withBasePath('/css/style.css')} />
   {enableCodeHighlight && (
     <>
       <link rel="preconnect" href="https://cdnjs.cloudflare.com/" />
@@ -94,11 +96,11 @@ const modifiedTime = modifiedAt ?? publishedTime;
       <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.4.0/styles/base16/tomorrow-night.min.css" />
     </>
   )}
-  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="manifest" href={withBasePath('/manifest.webmanifest')} />
   {enableCodeHighlight && (
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   )}
-  <script type="module" src="/js/main.js"></script>
+  <script type="module" src={withBasePath('/js/main.js')}></script>
 
   <title>{title}</title>
 
@@ -109,7 +111,7 @@ const modifiedTime = modifiedAt ?? publishedTime;
 
   {alternates.map(({ lang: alternateLang, pathname }) => {
     const normalizedLang = alternateLang.toLowerCase();
-    const href = new URL(pathname, baseDomain).toString();
+    const href = toSiteHref(pathname);
 
     if (normalizedLang === 'x-default') {
       return <link rel="alternate" hreflang="x-default" href={href} />;
@@ -156,7 +158,7 @@ const modifiedTime = modifiedAt ?? publishedTime;
       <link
         rel="alternate"
         type="application/rss+xml"
-        href="/rss.xml"
+        href={withBasePath('/rss.xml')}
         title={`${rssTitleDefault} RSS feed`}
       />
       {listNonDefaultLocales()
@@ -164,7 +166,7 @@ const modifiedTime = modifiedAt ?? publishedTime;
           <link
             rel="alternate"
             type="application/rss+xml"
-            href={`/${code}/rss.xml`}
+            href={withBasePath(`/${code}/rss.xml`)}
             title={`${siteConfig.title[code] ?? rssTitleDefault} RSS feed`}
           />
         ))}

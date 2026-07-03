@@ -1,4 +1,6 @@
 ---
+import { withBasePath } from '@utils/url';
+
 interface ProfileCardProps {
   title: string;
   description: string;
@@ -37,8 +39,8 @@ const classNames = ['profile', ...baseClasses.filter(Boolean)];
   </div>
   <div class="profile__content">
     <div class="profile__content-top">
-      <a href={profileHref}>
-        <img src={avatarSrc} alt={alt} />
+      <a href={withBasePath(profileHref)}>
+        <img src={withBasePath(avatarSrc)} alt={alt} />
       </a>
     </div>
     <div class="profile__content-mid">

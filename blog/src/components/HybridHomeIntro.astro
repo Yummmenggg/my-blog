@@ -1,5 +1,6 @@
 ---
 import siteConfig from '@config/site';
+import { withBasePath } from '@utils/url';
 
 type Feature = {
   icon: string;
@@ -22,9 +23,9 @@ type ContactLink = {
 const { contactLinks = [] } = Astro.props as { contactLinks?: ContactLink[] };
 
 const isExternalLink = (url: string) => /^https?:\/\//i.test(url);
-const avatarSrc = siteConfig.author.avatar;
+const avatarSrc = withBasePath(siteConfig.author.avatar);
 
-const features: Feature[] = [
+const features: Feature[] = ([
   {
     icon: "💻",
     label: "C++ && Linux",
@@ -52,7 +53,12 @@ const features: Feature[] = [
     blogHref: "/blog/?tag=algorithm",
     projectHref: "/projects/?tag=algorithm",
   },
-];
+] as Feature[]).map((feature) => ({
+  ...feature,
+  href: withBasePath(feature.href),
+  blogHref: withBasePath(feature.blogHref),
+  projectHref: withBasePath(feature.projectHref),
+}));
 ---
 
 <section class="hybrid-home" aria-label="Featured introduction">
@@ -77,12 +83,12 @@ const features: Feature[] = [
     </div>
 
     <div class="hybrid-home__side-panel">
-      <a class="hybrid-home__profile-card" href="/about/">
+      <a class="hybrid-home__profile-card" href={withBasePath('/about/')}>
         <span class="hybrid-home__panel-title"><span aria-hidden="true">💻</span> Profile</span>
         <span>Learning systems, agents, algorithms, and practical engineering notes.</span>
       </a>
 
-      <a class="hybrid-home__project-card" href="/projects/">
+      <a class="hybrid-home__project-card" href={withBasePath('/projects/')}>
         <span class="hybrid-home__panel-title"><span aria-hidden="true">🌟</span> Projects</span>
         <span>Code experiments, tools, and reusable learning artifacts.</span>
       </a>
@@ -93,7 +99,7 @@ const features: Feature[] = [
           <div class="hybrid-home__contact-links" aria-label="Contact links">
             {contactLinks.map((link) => (
               <a
-                href={link.url}
+                href={withBasePath(link.url)}
                 aria-label={link.name}
                 title={link.name}
                 target={isExternalLink(link.url) ? '_blank' : undefined}
@@ -134,7 +140,7 @@ const features: Feature[] = [
   <div class="hybrid-home__tracks" aria-label="Learning collections">
     {features.map((feature) => (
       <article class="hybrid-home__track">
-        <a class="hybrid-home__track-main" href={feature.href}>
+        <a class="hybrid-home__track-main" href={withBasePath(feature.href)}>
           <span class="hybrid-home__track-icon" aria-hidden="true">{feature.glyph}</span>
           <div>
             <h3>{feature.label}</h3>

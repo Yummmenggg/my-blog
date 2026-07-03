@@ -18,6 +18,7 @@ import {
 import { formatDate } from '@lib/format';
 import { DEFAULT_LOCALE } from '@lib/language';
 import { useTranslations, useTranslatedPath } from '@i18n/utils';
+import { withBasePath } from '@utils/url';
 
 const {
   entry,
@@ -35,12 +36,12 @@ const translatePath = useTranslatedPath(lang);
 const aboutHref = await (async () => {
   const localized = await getPageByTranslationKey('about', lang);
   if (localized) {
-    return getPagePermalink(localized);
+    return withBasePath(getPagePermalink(localized));
   }
 
   const fallback = await getPageByTranslationKey('about', DEFAULT_LOCALE);
   if (fallback) {
-    return getPagePermalink(fallback);
+    return withBasePath(getPagePermalink(fallback));
   }
 
   return translatePath('/about');
@@ -72,7 +73,7 @@ const alternates = (() => {
     }
 
     if (!linkMap.has(localeCode)) {
-      const href = new URL(permalink, siteConfig.siteUrl).toString();
+      const href = new URL(withBasePath(permalink), siteConfig.siteUrl).toString();
       linkMap.set(localeCode, href);
     }
   };
@@ -119,7 +120,7 @@ const alternates = (() => {
                 <div class="author__photo">
                   <a href={aboutHref}>
                     <picture>
-                      <img src={siteConfig.author.avatar} alt={t('name')} />
+                      <img src={withBasePath(siteConfig.author.avatar)} alt={t('name')} />
                     </picture>
                   </a>
                 </div>
@@ -173,7 +174,7 @@ const alternates = (() => {
         <span class="close">&times;</span>
         <img class="lightbox-content" />
       </div>
-      <script type="module" src="/js/lightbox.js"></script>
+      <script type="module" src={withBasePath('/js/lightbox.js')}></script>
     </>
   )}
 

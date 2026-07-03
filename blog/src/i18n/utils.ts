@@ -1,4 +1,4 @@
-import { addTrailingSlash } from '@utils/url';
+import { addTrailingSlash, stripBasePath, withBasePath } from '@utils/url';
 import { ui, defaultLang, showDefaultLang } from './ui';
 
 const normalizeBasePath = (path: string): string => {
@@ -11,7 +11,7 @@ const normalizeBasePath = (path: string): string => {
 };
 
 export function getLangFromUrl(url: URL) {
-  const [, lang] = url.pathname.split('/');
+  const [, lang] = stripBasePath(url.pathname).split('/');
   if (lang && lang in ui) {
     return lang as keyof typeof ui;
   }
@@ -28,10 +28,10 @@ export function useTranslatedPath(lang: keyof typeof ui) {
   return (path: string, targetLang: keyof typeof ui = lang) => {
     const normalizedPath = normalizeBasePath(path);
     if (!showDefaultLang && targetLang === defaultLang) {
-      return normalizedPath;
+      return withBasePath(normalizedPath);
     }
 
     const translatedPath = `/${targetLang}${normalizedPath}`;
-    return addTrailingSlash(translatedPath);
+    return withBasePath(addTrailingSlash(translatedPath));
   };
 }

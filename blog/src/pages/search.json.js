@@ -8,6 +8,7 @@ import {
 } from '@lib/content';
 import { DEFAULT_LOCALE } from '@lib/language';
 import { formatDate } from '@lib/format';
+import { withBasePath } from '@utils/url';
 
 const isDevelopment = import.meta.env.DEV;
 const MAX_CONTENT_LENGTH = 400;
@@ -35,7 +36,7 @@ export async function GET() {
     title: entry.data.h1 ?? entry.data.title ?? 'Untitled',
     description: entry.data.description ?? entry.data.announcement ?? '',
     tags: entry.data.tags ?? [],
-    url: new URL(getPostPermalink(entry), siteConfig.siteUrl).toString(),
+    url: new URL(withBasePath(getPostPermalink(entry)), siteConfig.siteUrl).toString(),
     date: formatDate(entry.data.date, getPostLanguage(entry)),
     publishedAt: entry.data.date.toISOString(),
     content: (() => {
@@ -55,7 +56,7 @@ export async function GET() {
       const image = getPostImage(entry);
       return image.startsWith('http')
         ? image
-        : `${siteConfig.siteUrl}${image}`;
+        : new URL(withBasePath(image), siteConfig.siteUrl).toString();
     })(),
     category: getPostCategory(entry),
     icon: siteConfig.categories[getPostCategory(entry)]?.icon ?? '📂',

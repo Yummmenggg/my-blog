@@ -18,7 +18,7 @@ import {
 } from '@lib/content';
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, isDefaultLocale } from '@lib/language';
 import { formatDate } from '@lib/format';
-import { ensureTrailingSlash } from '@utils/url';
+import { ensureTrailingSlash, withBasePath } from '@utils/url';
 import {
   getLangFromUrl,
   useTranslations,
@@ -53,12 +53,12 @@ const translatePath = useTranslatedPath(lang);
 const aboutHref = await (async () => {
   const localized = await getPageByTranslationKey('about', lang);
   if (localized) {
-    return getPagePermalink(localized);
+    return withBasePath(getPagePermalink(localized));
   }
 
   const fallback = await getPageByTranslationKey('about', DEFAULT_LOCALE);
   if (fallback) {
-    return getPagePermalink(fallback);
+    return withBasePath(getPagePermalink(fallback));
   }
 
   return translatePath('/about');
@@ -70,6 +70,14 @@ const prevPageUrl = page.url.prev
 const nextPageUrl = page.url.next
   ? ensureTrailingSlash(page.url.next)
   : undefined;
+
+if (page.url.prev) {
+  page.url.prev = withBasePath(page.url.prev);
+}
+
+if (page.url.next) {
+  page.url.next = withBasePath(page.url.next);
+}
 
 const categoriesSet = new Set(posts.map((post) => getPostCategory(post)));
 const shouldShowCategories = !categoryId && categoriesSet.size > 1;
@@ -127,7 +135,7 @@ const contactLinks = (() => {
     links.unshift({
       id: 'rss',
       name: 'RSS',
-      url: `${basePrefix}/rss.xml`,
+      url: withBasePath(`${basePrefix}/rss.xml`),
       icon: '📰',
     });
   }
@@ -170,13 +178,13 @@ const postsWithMetadata = posts.map((post) => {
     category;
 
   return {
-    url: getPostPermalink(post),
+    url: withBasePath(getPostPermalink(post)),
     title: post.data.h1 ?? post.data.title,
     announcement: post.data.announcement,
     category,
     categoryLabel,
     date: formatDate(post.data.date, lang),
-    image: getPostImage(post),
+    image: withBasePath(getPostImage(post)),
     tags: post.data.tags ?? [],
   };
 });
@@ -250,14 +258,14 @@ for (const group of localeGroups) {
 
 const alternates = Array.from(alternateEntries.values()).map(({ lang: localeCode, path }) => ({
   lang: localeCode,
-  url: new URL(path, siteConfig.siteUrl).toString(),
+  url: new URL(withBasePath(path), siteConfig.siteUrl).toString(),
 }));
 
 const defaultAlternate = alternateEntries.get(DEFAULT_LOCALE.toLowerCase());
 if (defaultAlternate) {
   alternates.push({
     lang: 'x-default',
-    url: new URL(defaultAlternate.path, siteConfig.siteUrl).toString(),
+    url: new URL(withBasePath(defaultAlternate.path), siteConfig.siteUrl).toString(),
   });
 }
 ---
@@ -386,7 +394,7 @@ if (defaultAlternate) {
         title={t('ui.profile')}
         description={t('ui.description')}
         profileHref={aboutHref}
-        avatarSrc={siteConfig.author.avatar}
+        avatarSrc={withBasePath(siteConfig.author.avatar)}
         alt={t('name')}
       />
 

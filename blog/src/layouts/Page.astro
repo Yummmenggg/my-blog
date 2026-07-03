@@ -9,6 +9,7 @@ import {
 } from '@lib/content';
 import { DEFAULT_LOCALE } from '@lib/language';
 import { useTranslations, useTranslatedPath } from '@i18n/utils';
+import { withBasePath } from '@utils/url';
 
 const {
   entry,
@@ -26,12 +27,12 @@ const translatePath = useTranslatedPath(lang);
 const aboutHref = await (async () => {
   const localized = await getPageByTranslationKey('about', lang);
   if (localized) {
-    return getPagePermalink(localized);
+    return withBasePath(getPagePermalink(localized));
   }
 
   const fallback = await getPageByTranslationKey('about', DEFAULT_LOCALE);
   if (fallback) {
-    return getPagePermalink(fallback);
+    return withBasePath(getPagePermalink(fallback));
   }
 
   return translatePath('/about');
@@ -53,7 +54,7 @@ const aboutHref = await (async () => {
                 <div class="author__photo">
                   <a href={translatePath('/')}>
                     <picture>
-                      <img src={siteConfig.author.avatar} alt={t('name')} />
+                      <img src={withBasePath(siteConfig.author.avatar)} alt={t('name')} />
                     </picture>
                   </a>
                 </div>

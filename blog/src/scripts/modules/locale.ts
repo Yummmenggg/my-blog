@@ -6,6 +6,27 @@ export type LocaleConfig = {
 };
 
 type LocaleWindow = typeof window & { __LOCALE_CONFIG__?: LocaleConfig };
+type BaseWindow = typeof window & { __ASTRO_BASE_PATH__?: unknown };
+
+const getBasePath = (): string => {
+  const raw = (window as BaseWindow).__ASTRO_BASE_PATH__;
+  if (typeof raw !== 'string' || !raw.length || raw === '/') {
+    return '';
+  }
+
+  const prefixed = raw.startsWith('/') ? raw : `/${raw}`;
+  return prefixed.endsWith('/') ? prefixed.slice(0, -1) : prefixed;
+};
+
+const stripBasePath = (pathname: string): string => {
+  const basePath = getBasePath();
+  if (!basePath || !pathname.startsWith(basePath)) {
+    return pathname;
+  }
+
+  const stripped = pathname.slice(basePath.length);
+  return stripped.startsWith('/') ? stripped : `/${stripped}`;
+};
 
 export const getLocaleConfig = (): LocaleConfig => {
   const raw = (window as LocaleWindow).__LOCALE_CONFIG__;
@@ -38,7 +59,8 @@ export const normalizeLanguage = (lang: string | null | undefined, config: Local
 };
 
 export const getLanguageFromPath = (pathname: string, config: LocaleConfig): string => {
-  const normalizedPath = pathname.endsWith('/') ? pathname : `${pathname}/`;
+  const pathWithoutBase = stripBasePath(pathname);
+  const normalizedPath = pathWithoutBase.endsWith('/') ? pathWithoutBase : `${pathWithoutBase}/`;
 
   for (const code of config.languages) {
     if (code === config.defaultLanguage) {
@@ -58,11 +80,12 @@ export const getTargetPath = (lang: string, config: LocaleConfig): string => {
 };
 
 export const stripLanguageFromPath = (pathname: string, lang: string, config: LocaleConfig): string => {
+  const pathWithoutBase = stripBasePath(pathname);
   if (lang === config.defaultLanguage) {
-    return pathname;
+    return pathWithoutBase;
   }
 
   const pattern = new RegExp(`^/${lang}`);
-  const stripped = pathname.replace(pattern, '');
+  const stripped = pathWithoutBase.replace(pattern, '');
   return stripped || '/';
 };

@@ -2,6 +2,7 @@ import rss from '@astrojs/rss';
 import siteConfig from '@config/site';
 import { getPosts, getPostPermalink } from '@lib/content';
 import { DEFAULT_LOCALE, isSupportedLocale, listNonDefaultLocales, normalizeLocale } from '@lib/language';
+import { withBasePath } from '@utils/url';
 
 export function getStaticPaths() {
   return listNonDefaultLocales().map((lang) => ({ params: { lang } }));
@@ -26,7 +27,7 @@ export async function GET({ params }) {
       title: entry.data.h1 ?? entry.data.title,
       description:
         entry.data.description ?? entry.data.announcement ?? '',
-      link: new URL(getPostPermalink(entry), siteConfig.siteUrl).toString(),
+      link: new URL(withBasePath(getPostPermalink(entry)), siteConfig.siteUrl).toString(),
       pubDate: entry.data.date,
       content: entry.body,
     })),

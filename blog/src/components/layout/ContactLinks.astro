@@ -1,4 +1,6 @@
 ---
+import { withBasePath } from '@utils/url';
+
 interface ContactLink {
   id?: string;
   name: string;
@@ -35,7 +37,7 @@ const classNames = ['contact', ...baseClasses.filter(Boolean)];
   <div class="box-links contact__box-links">
     {links.map((link) => (
       <a
-        href={link.url}
+        href={withBasePath(link.url)}
         rel="noreferrer"
         target="_blank"
         class="box-links__link"
