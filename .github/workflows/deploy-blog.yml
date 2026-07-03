@@ -1,4 +1,5 @@
 name: Deploy Blog
+run-name: Deploy blog from ${{ github.ref_name }}
 
 on:
   push:
